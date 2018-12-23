@@ -1,10 +1,11 @@
 // A simple Particle class
 var Particle = function(position, img) {
-	this.acceleration = createVector((sin(radians(windRad))/200), (cos(radians(windRad))/200)-nasdaqPerf/100);
+	this.acceleration = createVector((sin(radians(windRad))/50), (cos(radians(windRad))/200)-nasdaqPerf/100);
 	this.velocity = createVector(random(-1, 1), random(-1, 0));
 	this.position = position.copy();
 	this.lifespan = 600;
 	this.texture = img;
+	this.size = random(30, 80);
 };
 
 Particle.prototype.run = function() {
@@ -21,10 +22,8 @@ Particle.prototype.update = function(){
 
 // Method to display
 Particle.prototype.display = function() {
-  stroke(200, this.lifespan);
-  strokeWeight(2);
-  fill(127, this.lifespan);
-  ellipse(this.position.x, this.position.y, 12, 12);
+  //var size = random(0, 1);
+  image(this.texture, this.position.x, this.position.y, this.size, this.size);
 };
 
 // Is the particle still useful?

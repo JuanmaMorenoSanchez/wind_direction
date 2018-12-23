@@ -13,9 +13,10 @@ var windRad, windSpeed;
 var nasdaqPerf;
 
 var bg;
+var headAngel, head;
+
 var canvas;
 var system;
-//var angel_head, demon_head;
 var spawnpoint;
 
 var showMoreText = false;
@@ -32,39 +33,42 @@ var wallStreetUrl = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAIL
  *                                                            *
  **************************************************************/
 
+function preload(){
+	var size;
+	if (windowWidth > windowHeight) {
+		if (windowWidth > 1200){
+			size = "md";
+		} else if (windowWidth <= 1200 && windowWidth > 640) {
+			size = "sm";
+		} else if (windowWidth < 640) {
+			size = "xs";
+		}
+		spawnpoint = [windowWidth*0.75, windowHeight*0.7];
+		bg = loadImage("assets/background_"+size+".jpg");
+		
+	} else {
+		if (windowHeight > 1200){
+			size = "md";
+		} else if (windowHeight <= 1200 && windowHeight > 640) {
+			size = "sm";
+		} else if (windowHeight < 640) {
+			size = "xs";
+		}
+		spawnpoint = [windowWidth*0.7, windowHeight*0.3];
+		bg = loadImage("assets/background_movil_"+size+".jpg");
+	}
+	headAngel = loadImage("assets/head-angel.png");
+	head = loadImage("assets/head.png");
+} 
+ 
 function setup() {
 	loadData();
 	
-	if (windowWidth > windowHeight) {
-		spawnpoint = [windowWidth*0.75, windowHeight*0.7];
-		bg = loadImage("assets/background.jpg");/*, function(){
-			tint(80, 220, 100);
-			image(bg, 0, 0, windowWidth, windowHeight);
-			noTint();
-		});*/
-		
-	} else {
-		spawnpoint = [windowWidth*0.7, windowHeight*0.3];
-		bg = loadImage("assets/background_movil.jpg");
-	}
-	
+	frameRate(45);
+
 	canvas = createCanvas(windowWidth, windowHeight);
 	system = new ParticleSystem(createVector(spawnpoint[0], spawnpoint[1]));
-	
 	startTime=millis();
-	/*
-	if (weatherData && stockData){
-		windRad = weatherData.current.wind_degree;
-		windSpeed = weatherData.current.wind_kph;
-		nasdaqPerf = getGrow(stockData["Time Series (Daily)"][Object.keys(stockData["Time Series (Daily)"])[0]]["1. open"], stockData["Time Series (Daily)"][Object.keys(stockData["Time Series (Daily)"])[0]]["4. close"]);	
-		if(!particleImg){
-			if (Math.sign(nasdaqPerf) == 1){
-				particleImg = loadImage("assets/head-angel.png");
-			} else {
-				particleImg = loadImage("assets/head.png");
-			}
-		} 
-	}*/
 }
 
 /************************************************************
@@ -77,6 +81,8 @@ function draw() {
 	background(bg);
 	//background(0);
 	
+	getTexts();
+	
 	if (weatherData && stockData){
 		windRad = weatherData.current.wind_degree;
 		windSpeed = weatherData.current.wind_kph;
@@ -84,28 +90,17 @@ function draw() {
 		
 		if(!particleImg){
 			if (Math.sign(nasdaqPerf) == 1){
-				particleImg = loadImage("assets/head-angel.png");
+				particleImg = headAngel;
 			} else {
-				particleImg = loadImage("assets/head.png");
+				particleImg = head;
 			}
 		} 
 		
-		getTexts();
-		
 		system.addParticle(particleImg);
 		system.run();
+	} else {
+		
 	}
-	/*
-	if (weatherData && stockData){
-		if(nasDaqPerf){
-			if (nasDaqPerf >= 0){
-				cursorImg = loadImage("assets/head-angel.png")
-			} else{
-				cursorImg = loadImage("assets/head.png")
-			}
-		}
-		//cursor(cursorImg,40,40)
-	}*/
 	
 	if (hasFinished()) {
 		loadData();
@@ -124,12 +119,6 @@ function keyPressed() {
 	if (key == 'I' || keyCode == 73){
 		showMoreText = ! showMoreText
 	}
-	/*
-	if (key == 'Escape' || keyCode == 27){
-		var referer = document.referrer;
-		alert(referrer);
-		//window.location(referer);
-	}*/
 }
 
 
@@ -175,10 +164,14 @@ function getTexts() {
 	else {
 		if (weatherData){
 			text("Wind direction in "+weatherData.location.name+" :"+weatherData.current.wind_dir+" (direction: "+windRad+"). Wind speed: "+windSpeed+" KPH (Last update on local time: "+weatherData.current.last_updated+")", 10, 70);
+		} else {
+			text("Loading weather data...", 10, 70);
 		}
 		
 		if (stockData){
 			text("Nasdaq Index performed "+nasdaqPerf+"% (Last update: "+Object.keys(stockData["Time Series (Daily)"])[0]+")", 10, 90);
+		} else {
+			text("Loading Nasdaq data...", 10, 70);
 		}
 		
 		var time = millis() - startTime;
