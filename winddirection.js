@@ -64,12 +64,13 @@ function preload(){
 } 
  
 function setup() {
+	canvas = createCanvas(windowWidth, windowHeight);
+	
 	loadData();
 	
-	pixelDensity(3.0);
+	pixelDensity(0.8);
 	frameRate(45);
-
-	canvas = createCanvas(windowWidth, windowHeight);
+	
 	system = new ParticleSystem(createVector(spawnpoint[0], spawnpoint[1]));
 	startTime = millis();
 	
@@ -174,7 +175,11 @@ function getGrow(openValue, closeValue){
 
 function getTexts() {
 	fill(200);
-	textSize(16);
+	if (windowWidth > windowHeight) {
+		textSize(18);
+	} else {
+		textSize(24);
+	}
 	text(copyright, 10, 20);
 	
 	if (!showMoreText) {
@@ -192,11 +197,14 @@ function getTexts() {
 		} else {
 			text("Loading Nasdaq data...", 10, 90);
 		}
-		/*
+		
 		var time = millis() - startTime;
 		text("Time to update: " + Math.floor((timeToRestart - time)/1000), 10, 120);
 		
 		var fps = frameRate();
-		text("FPS: " + fps.toFixed(2), 10, 140);*/
+		text("FPS: " + fps.toFixed(2), 10, 140);
+		
+		var pixelDensity = displayDensity();
+		text("Pixel density: " + pixelDensity, 10, 160);
 	}
 }
