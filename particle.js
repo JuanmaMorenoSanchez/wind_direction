@@ -3,9 +3,9 @@ var Particle = function(position, img) {
 	this.acceleration = createVector((sin(radians(windRad))/50), (cos(radians(windRad))/200)-nasdaqPerf/100);
 	this.velocity = createVector(random(-1, 1), random(-1, 0));
 	this.position = position.copy();
-	this.lifespan = 400;
+	this.lifespan = 500;
 	this.texture = img;
-	this.size = random(30, 80);
+	this.size = random(30, 120);
 };
 
 Particle.prototype.run = function() {
@@ -25,7 +25,15 @@ Particle.prototype.display = function() {
   /*if (this.lifespan < 40){
 	tint(255, this.lifespan);
   } */ 
-  image(this.texture, this.position.x, this.position.y, this.size, this.size);
+  image(
+	this.texture, 
+	this.position.x,
+	this.position.y,
+	//this.position.x+round(random(-12,12)), 
+	//this.position.y+round(random(-12,12)), 
+	this.size, 
+	this.size
+  );
 };
 
 // Is the particle still useful?
