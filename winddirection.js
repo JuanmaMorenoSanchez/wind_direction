@@ -37,22 +37,22 @@ function preload(){
 	spawnpoint = [windowWidth*0.7, windowHeight*0.35];
 	var size;
 	if (windowWidth > windowHeight) {
-		if (windowWidth > 1200){
+		if (windowWidth > 1400){
 			size = "md";
-		} else if (windowWidth <= 1200 && windowWidth > 640) {
+		} else if (windowWidth <= 1400 && windowWidth > 800) {
 			size = "sm";
-		} else if (windowWidth < 640) {
+		} else if (windowWidth < 800) {
 			size = "xs";
 		}
 		bg = loadImage("assets/background_"+size+".jpg");
 		headGirl = loadImage("assets/head-girl_"+size+".png");
 		
 	} else {
-		if (windowHeight > 1200){
+		if (windowHeight > 1400){
 			size = "md";
-		} else if (windowHeight <= 1200 && windowHeight > 640) {
+		} else if (windowHeight <= 1400 && windowHeight > 800) {
 			size = "sm";
-		} else if (windowHeight < 640) {
+		} else if (windowHeight < 800) {
 			size = "xs";
 		}
 		bg = loadImage("assets/background_movil_"+size+".jpg");
@@ -66,6 +66,7 @@ function preload(){
 function setup() {
 	loadData();
 	
+	pixelDensity(3.0);
 	frameRate(45);
 
 	canvas = createCanvas(windowWidth, windowHeight);
@@ -83,7 +84,7 @@ function setup() {
 
 function draw() {
 	//background(bg);
-	image(headGirl, windowWidth/4, 0);
+	drawTopElements();
 	
 	getTexts();
 	
@@ -104,9 +105,6 @@ function draw() {
 		system.run();
 	} 
 	
-	rotate(PI / 180 * 180);
-	image(headGirl, windowWidth/-1.5, windowHeight*-1);
-	
 	if (hasFinished()) {
 		loadData();
 		startTime = millis();
@@ -124,6 +122,15 @@ function keyPressed() {
 	if (key == 'I' || keyCode == 73){
 		showMoreText = ! showMoreText
 	}
+	background(bg);
+	drawTopElements();
+	getTexts()
+}
+
+function mousePressed() {
+  background(bg);
+  getTexts()
+  drawTopElements();
 }
 
 
@@ -138,6 +145,13 @@ function loadData() {
 	loadJSON(weatherUrl, getWeather);
 	loadJSON(wallStreetUrl, getStock);
     frameCount = -1;
+}
+
+function drawTopElements(){
+	image(headGirl, windowWidth/4, 0);
+	rotate(PI / 180 * 180);
+	image(headGirl, windowWidth/-1.5, windowHeight*-1);
+	rotate(PI / 180 * 180);
 }
 
 function hasFinished() {
@@ -176,13 +190,13 @@ function getTexts() {
 		if (stockData){
 			text("Nasdaq Index performed "+nasdaqPerf+"% (Last update: "+Object.keys(stockData["Time Series (Daily)"])[0]+")", 10, 90);
 		} else {
-			text("Loading Nasdaq data...", 10, 70);
+			text("Loading Nasdaq data...", 10, 90);
 		}
-		
+		/*
 		var time = millis() - startTime;
 		text("Time to update: " + Math.floor((timeToRestart - time)/1000), 10, 120);
 		
 		var fps = frameRate();
-		text("FPS: " + fps.toFixed(2), 10, 140);
+		text("FPS: " + fps.toFixed(2), 10, 140);*/
 	}
 }

@@ -4,7 +4,7 @@ var ParticleSystem = function(position) {
 };
 
 ParticleSystem.prototype.addParticle = function(img) {
-  if (int(random(0, 7)) == 0) {
+  if (int(random(0, 17)) == 0) {
 	this.particles.push(new Particle(this.origin, img));
   }
 };
