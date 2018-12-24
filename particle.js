@@ -3,7 +3,7 @@ var Particle = function(position, img) {
 	this.acceleration = createVector((sin(radians(windRad))/50), (cos(radians(windRad))/200)-nasdaqPerf/100);
 	this.velocity = createVector(random(-1, 1), random(-1, 0));
 	this.position = position.copy();
-	this.lifespan = 600;
+	this.lifespan = 400;
 	this.texture = img;
 	this.size = random(30, 80);
 };
@@ -22,7 +22,9 @@ Particle.prototype.update = function(){
 
 // Method to display
 Particle.prototype.display = function() {
-  //var size = random(0, 1);
+  /*if (this.lifespan < 40){
+	tint(255, this.lifespan);
+  } */ 
   image(this.texture, this.position.x, this.position.y, this.size, this.size);
 };
 

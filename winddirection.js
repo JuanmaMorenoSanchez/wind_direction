@@ -13,7 +13,7 @@ var windRad, windSpeed;
 var nasdaqPerf;
 
 var bg;
-var headAngel, head;
+var headGirl, headAngel, head;
 
 var canvas;
 var system;
@@ -34,6 +34,7 @@ var wallStreetUrl = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAIL
  **************************************************************/
 
 function preload(){
+	spawnpoint = [windowWidth*0.7, windowHeight*0.35];
 	var size;
 	if (windowWidth > windowHeight) {
 		if (windowWidth > 1200){
@@ -43,8 +44,8 @@ function preload(){
 		} else if (windowWidth < 640) {
 			size = "xs";
 		}
-		spawnpoint = [windowWidth*0.75, windowHeight*0.7];
 		bg = loadImage("assets/background_"+size+".jpg");
+		headGirl = loadImage("assets/head-girl_"+size+".png");
 		
 	} else {
 		if (windowHeight > 1200){
@@ -54,9 +55,10 @@ function preload(){
 		} else if (windowHeight < 640) {
 			size = "xs";
 		}
-		spawnpoint = [windowWidth*0.7, windowHeight*0.3];
 		bg = loadImage("assets/background_movil_"+size+".jpg");
+		headGirl = loadImage("assets/head-girl_"+size+".png");
 	}
+	
 	headAngel = loadImage("assets/head-angel.png");
 	head = loadImage("assets/head.png");
 } 
@@ -68,7 +70,9 @@ function setup() {
 
 	canvas = createCanvas(windowWidth, windowHeight);
 	system = new ParticleSystem(createVector(spawnpoint[0], spawnpoint[1]));
-	startTime=millis();
+	startTime = millis();
+	
+	image(bg, 0, 0, windowWidth, windowHeight);
 }
 
 /************************************************************
@@ -78,8 +82,8 @@ function setup() {
  **************************************************************/
 
 function draw() {
-	background(bg);
-	//background(0);
+	//background(bg);
+	image(headGirl, windowWidth/4, 0);
 	
 	getTexts();
 	
@@ -98,9 +102,10 @@ function draw() {
 		
 		system.addParticle(particleImg);
 		system.run();
-	} else {
-		
-	}
+	} 
+	
+	rotate(PI / 180 * 180);
+	image(headGirl, windowWidth/-1.5, windowHeight*-1);
 	
 	if (hasFinished()) {
 		loadData();
@@ -155,7 +160,7 @@ function getGrow(openValue, closeValue){
 
 function getTexts() {
 	fill(200);
-	textSize(14);
+	textSize(16);
 	text(copyright, 10, 20);
 	
 	if (!showMoreText) {
