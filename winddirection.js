@@ -34,7 +34,7 @@ var wallStreetUrl = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAIL
  **************************************************************/
 
 function preload(){
-	spawnpoint = [windowWidth*0.7, windowHeight*0.35];
+	spawnpoint = [windowWidth/2, windowHeight/2]; //[windowWidth*0.7, windowHeight*0.35];
 	var size = "md";
 	var sizeAsset = "md";
 	if (windowWidth > windowHeight) {
@@ -67,13 +67,13 @@ function setup() {
 	
 	loadData();
 	
-	pixelDensity(0.8);
-	frameRate(45);
+	pixelDensity(0.5);
+	frameRate(40);
 	
 	system = new ParticleSystem(createVector(spawnpoint[0], spawnpoint[1]));
 	startTime = millis();
 	
-	image(bg, 0, 0, windowWidth, windowHeight);
+	//image(bg, 0, 0, windowWidth, windowHeight);
 }
 
 /************************************************************
@@ -83,14 +83,17 @@ function setup() {
  **************************************************************/
 
 function draw() {
-	//background(bg);
-	//drawTopElements();
+	clear();
+	background(bg);
 	
-	if (weatherData && stockData){
-		
+	if (weatherData && stockData){	
 		windRad = weatherData.current.wind_degree;
 		windSpeed = weatherData.current.wind_kph;
 		nasdaqPerf = getGrow(stockData["Time Series (Daily)"][Object.keys(stockData["Time Series (Daily)"])[0]]["1. open"], stockData["Time Series (Daily)"][Object.keys(stockData["Time Series (Daily)"])[0]]["4. close"]);	
+		
+		//background(bg);
+		
+		getTexts();
 		
 		if(!particleImg){
 			if (Math.sign(nasdaqPerf) == 1){
@@ -104,15 +107,18 @@ function draw() {
 		system.run();
 		
 		if (Math.sign(nasdaqPerf) == 1){
-			tint(180, 255, 220)
+			tint(180, 255, 220, 120+round(random(-10,10)));
 		} else {
-			tint(255, 220, 180)
+			tint(255, 220, 180, 120+round(random(-10,10)));
 		}
-		drawTopElements();
-		noTint()
+		
+		image(headGirl, 0+round(random(-2,2)), 0+round(random(-2,2)));
+		image(headGirl, windowWidth/2+round(random(-2,2)), 0+round(random(-2,2)));
+		image(headGirl, windowWidth/1.3+round(random(-2,2)), 0+round(random(-2,2)));
+		rotate(PI / 180 * 180);
+		image(headGirl, windowWidth/-1.5+round(random((windowWidth/3)*-1,(windowWidth/3))), windowHeight*-1+round(random(-2,2)));
+		noTint();
 	} 
-	
-	getTexts();
 	
 	if (hasFinished()) {
 		loadData();
@@ -135,12 +141,12 @@ function keyPressed() {
 	drawTopElements();
 	getTexts()
 }
-
+/*
 function mousePressed() {
-  background(bg);
+  //background(bg);
   getTexts()
   drawTopElements();
-}
+}*/
 
 
 /************************************************************
@@ -155,13 +161,13 @@ function loadData() {
 	loadJSON(wallStreetUrl, getStock);
     frameCount = -1;
 }
-
+/*
 function drawTopElements(){
-	image(headGirl, windowWidth/4+round(random(-6,6)), 0+round(random(-2,2)));
 	rotate(PI / 180 * 180);
-	image(headGirl, windowWidth/-1.5+round(random(-6,6)), windowHeight*-1+round(random(-2,2)));
-	rotate(PI / 180 * 180);
-}
+	tint(255, 120);
+	image(headGirl, windowWidth/-1.5+round(random(-80,80)), windowHeight*-1+round(random(-2,2)));
+	noTint();
+}*/
 
 function hasFinished() {
 	if(millis() - startTime >= timeToRestart){
@@ -205,7 +211,11 @@ function getTexts() {
 		} else {
 			text("Loading Nasdaq data...", 10, 90);
 		}
+		
+		//text(nasdaqPerf, 10, 120);
 		/*
+		nasdaqPerf
+		
 		var time = millis() - startTime;
 		text("Time to update: " + Math.floor((timeToRestart - time)/1000), 10, 120);
 		

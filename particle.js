@@ -3,7 +3,7 @@ var Particle = function(position, img) {
 	this.acceleration = createVector((sin(radians(windRad))/50), (cos(radians(windRad))/200)-nasdaqPerf/100);
 	this.velocity = createVector(random(-1, 1), random(-1, 0));
 	this.position = position.copy();
-	this.lifespan = 500;
+	this.lifespan = 600;
 	this.texture = img;
 	this.size = random(30, 120);
 };
@@ -22,9 +22,9 @@ Particle.prototype.update = function(){
 
 // Method to display
 Particle.prototype.display = function() {
-  /*if (this.lifespan < 40){
+  if (this.lifespan < 255){
 	tint(255, this.lifespan);
-  } */ 
+  } 
   image(
 	this.texture, 
 	this.position.x,
@@ -34,6 +34,8 @@ Particle.prototype.display = function() {
 	this.size, 
 	this.size
   );
+  
+  noTint();
 };
 
 // Is the particle still useful?
